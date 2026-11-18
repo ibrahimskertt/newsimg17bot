@@ -14,7 +14,7 @@ it (V1 base composition, V2 storytelling, V3 readability, V4 accuracy,
 V5 final polish).
 """
 import os
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ART = os.path.join(ROOT, "assets", "base-art.png")
@@ -37,7 +37,7 @@ CONFIG = dict(
     masthead2_size=112,
     date_text="TUESDAY, NOVEMBER 17, 2026",
     date_size=48,
-    hero_line="HORMUZ: CREW FLEES HIT TANKER, TRAFFIC NEARLY HALTED",
+    hero_line="HORMUZ: GAS TANKER HIT, CREW ABANDONS SHIP",
     hero_size=40,
     chips=[
         "HORMUZ STRAIT TRAFFIC AT 8% OF NORMAL",
@@ -45,7 +45,7 @@ CONFIG = dict(
         "TRUMP MEETS QUAD LEADERS IN MANILA",
         "NVIDIA BEATS AS AI TRADE UNWINDS",
         "CONGO EBOLA PASSES 11,000 CASES",
-        "UN: DRONES DRIVE SUDAN CIVILIAN TOLL",
+        "UN: DRONES BEHIND MOST SUDAN CIVILIAN DEATHS",
     ],
     chip_size=25,
     band_top=838,
@@ -88,8 +88,24 @@ def centered(draw, cx, y, text, f, fill, shadow=True):
     return w
 
 
+def soften_bow_markings(img):
+    """V4 accuracy pass: the AI base art carries faint pseudo-lettering on
+    the tanker's bow (like a painted ship name). Blur that small patch with
+    a feathered mask so the final image holds no garbled text anywhere."""
+    box = (596, 796, 716, 844)
+    patch = img.crop(box).filter(ImageFilter.GaussianBlur(3))
+    mask = Image.new("L", (box[2] - box[0], box[3] - box[1]), 0)
+    md = ImageDraw.Draw(mask)
+    md.rounded_rectangle([6, 6, box[2] - box[0] - 6, box[3] - box[1] - 6],
+                         radius=14, fill=255)
+    mask = mask.filter(ImageFilter.GaussianBlur(6))
+    img.paste(patch, (box[0], box[1]), mask)
+    return img
+
+
 def build(cfg=CONFIG):
     img = Image.open(ART).convert("RGB").resize((W, H), Image.LANCZOS)
+    img = soften_bow_markings(img)
     img = img.convert("RGBA")
 
     # Scrims: top for the masthead, bottom band for the chips.
