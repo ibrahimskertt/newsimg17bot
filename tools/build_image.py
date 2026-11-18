@@ -27,8 +27,8 @@ SANS_B = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
 
 WHITE = (255, 255, 255)
 AMBER = (255, 198, 74)
-CHIP_FILL = (7, 13, 23, 218)
-CHIP_LINE = (255, 255, 255, 72)
+CHIP_FILL = (7, 13, 23, 230)
+CHIP_LINE = (255, 255, 255, 110)
 
 CONFIG = dict(
     masthead1="THE WORLD AT A",
@@ -36,9 +36,9 @@ CONFIG = dict(
     masthead1_size=57,
     masthead2_size=112,
     date_text="TUESDAY, NOVEMBER 17, 2026",
-    date_size=45,
+    date_size=48,
     hero_line="HORMUZ: CREW FLEES HIT TANKER, TRAFFIC NEARLY HALTED",
-    hero_size=38,
+    hero_size=40,
     chips=[
         "HORMUZ STRAIT TRAFFIC AT 8% OF NORMAL",
         "UKRAINE STRIKES CRIMEAN BRIDGE AGAIN",
@@ -47,8 +47,8 @@ CONFIG = dict(
         "CONGO EBOLA PASSES 11,000 CASES",
         "UN: DRONES DRIVE SUDAN CIVILIAN TOLL",
     ],
-    chip_size=21,
-    band_top=852,
+    chip_size=25,
+    band_top=838,
     top_scrim_h=415,
 )
 
@@ -122,7 +122,7 @@ def build(cfg=CONFIG):
 
     # Caption chips: 2 columns x 3 rows inside the bottom band.
     chips = cfg["chips"]
-    margin, gap_x, gap_y, chip_h = 24, 16, 9, 46
+    margin, gap_x, gap_y, chip_h = 24, 16, 9, 50
     chip_w = (W - 2 * margin - gap_x) // 2
     top = cfg["band_top"] + 12
     for i, text in enumerate(chips):
