@@ -37,10 +37,10 @@ CONFIG = dict(
     masthead2_size=112,
     date_text="TUESDAY, NOVEMBER 17, 2026",
     date_size=45,
-    hero_line=None,          # V2 adds the lead-story headline here
-    hero_size=40,
+    hero_line="HORMUZ: CREW FLEES HIT TANKER, TRAFFIC NEARLY HALTED",
+    hero_size=38,
     chips=[
-        "HORMUZ: TANKER CREW ABANDONS SHIP",
+        "HORMUZ STRAIT TRAFFIC AT 8% OF NORMAL",
         "UKRAINE STRIKES CRIMEAN BRIDGE AGAIN",
         "TRUMP MEETS QUAD LEADERS IN MANILA",
         "NVIDIA BEATS AS AI TRADE UNWINDS",
@@ -49,7 +49,7 @@ CONFIG = dict(
     ],
     chip_size=21,
     band_top=852,
-    top_scrim_h=330,
+    top_scrim_h=415,
 )
 
 
@@ -114,9 +114,11 @@ def build(cfg=CONFIG):
 
     y = date_y + cfg["date_size"] + 14
     if cfg.get("hero_line"):
+        d.line([(cx - 62, y + 2), (cx + 62, y + 2)],
+               fill=(226, 54, 54, 255), width=4)
         fh, _ = fit(d, cfg["hero_line"], SANS_B, cfg["hero_size"], 960)
-        centered(d, cx, y, cfg["hero_line"], fh, WHITE)
-        y += cfg["hero_size"] + 10
+        centered(d, cx, y + 12, cfg["hero_line"], fh, WHITE)
+        y += cfg["hero_size"] + 22
 
     # Caption chips: 2 columns x 3 rows inside the bottom band.
     chips = cfg["chips"]
